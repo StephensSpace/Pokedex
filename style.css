@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    scroll-behavior: smooth;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: center;
+}
+
+#content {
+    width: 98%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#content .card {
+    flex: 1 1 calc(20% - 20px); /* Jeder Artikel nimmt ein Fünftel der Breite ein */
+    margin: 10px; /* Abstand zwischen den Elementen */
+
+}
