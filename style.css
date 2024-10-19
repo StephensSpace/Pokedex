@@ -6,6 +6,22 @@ body {
     align-items: center;
 }
 
+.dNone {
+    display: none !important;
+}
+
+.overlay {
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+}
+
 .cardHeader {
     display: flex;
     justify-content: center;
@@ -24,3 +40,4 @@ body {
     margin: 10px; /* Abstand zwischen den Elementen */
 
 }
+

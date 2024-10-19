@@ -4,9 +4,14 @@ let Pokemon = [];
 let PokemonDetails = [];
 // path pokemon/1/ = `pokemon/${id}/`
 
+function ToogleLoadingSpinner() {
+    document.getElementById('loadingSpinner').classList.toggle('dNone');
+    document.getElementById('pokeBall').classList.toggle('dNone');
+}
 
 async function fetchDataJson(path) {
     try {
+        ToogleLoadingSpinner()
         document.getElementById('content').innerHTML = '';
         let response = await fetch(path);
         Pokemon = await response.json();
@@ -15,6 +20,7 @@ async function fetchDataJson(path) {
     } catch (error) {
         console.error("Fehler:", error);
     }
+
 }
 
 function updatePath() {
@@ -73,8 +79,9 @@ async function renderPokemon() {
         let classImages = await fetchClassImage(classUrl);
         let number = index2 + 1;
         document.getElementById('content').innerHTML += PokeCardHTML(element, detailsElement, number);
-        renderClasses(classImages, number)
+        renderClasses(classImages, number);
     }
+    ToogleLoadingSpinner();
 }
 
 function renderClasses(classImages, number) {
@@ -132,9 +139,10 @@ async function fetchDetailsPokemon(path) {
             PokemonDetails.push(PokemonDetailsVar);
             return index2
         } else {
-            return index2 
+            return index2
         }
     } catch (error) {
         console.error("Fehler:", error);
     }
 }
+
