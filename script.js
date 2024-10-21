@@ -2,6 +2,7 @@ let offset = 0
 let path = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=" + `${offset}`;
 let Pokemon = [];
 let PokemonDetails = [];
+let timeoutId;
 // path pokemon/1/ = `pokemon/${id}/`
 
 function ToogleLoadingSpinner() {
@@ -16,11 +17,54 @@ async function fetchDataJson(path) {
         let response = await fetch(path);
         Pokemon = await response.json();
         Pokemon = Pokemon.results;
-        renderPokemon()
+        renderPokemon(Pokemon)
     } catch (error) {
         console.error("Fehler:", error);
     }
 
+}
+
+function checkInputLength() {
+    const input = document.getElementById("searchInput").value;
+    clearTimeout(timeoutId);
+
+    if (input.length >= 3) {  // Prüfung auf mindestens 3 Buchstaben
+        timeoutId = setTimeout(() => {
+            SearchFetchAllPokemon(input);
+        }, 300);  // Die Suchfunktion aufrufen und den Input übergeben
+    } else if (input.length == 0) {
+        fetchDataJson(path)
+    } else if (input.length == 4) {
+
+    }
+}
+
+async function SearchFetchAllPokemon(input) {
+    try {
+        ToogleLoadingSpinner()
+        document.getElementById('content').innerHTML = '';
+        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100&offset=0");
+        Pokemon = await response.json();
+        Pokemon = Pokemon.results;
+        await PokeSearchDetailFetch()
+        searchPokeName(input)
+    } catch (error) {
+        console.error("Fehler:", error);
+    }
+}
+
+async function PokeSearchDetailFetch() {
+    for (let index = 0; index < Pokemon.length; index++) {
+        const element = Pokemon[index];
+        let detailedUrl = element.url;
+        await fetchDetailsPokemon(detailedUrl) - 1;
+    }
+}
+
+function searchPokeName(input) {
+    const filteredPokemon = Pokemon.filter(pokemon =>
+        pokemon.name.includes(input.toLowerCase()));
+    renderPokemon(filteredPokemon)
 }
 
 function updatePath() {
@@ -69,9 +113,9 @@ function backBtnClick(nextBtn, backBtn) {
 
 
 
-async function renderPokemon() {
-    for (let index = 0; index < Pokemon.length; index++) {
-        const element = Pokemon[index];
+async function renderPokemon(array) {
+    for (let index = 0; index < array.length; index++) {
+        const element = array[index];
         let detailedUrl = element.url;
         let index2 = await fetchDetailsPokemon(detailedUrl) - 1;
         let detailsElement = PokemonDetails[index2];
@@ -120,7 +164,11 @@ function PokeCardHTML(element, detailsElement, number) {
 
     return `<div class="card" style="width: 18rem;">
                 <div class="cardHeader"><h3>#${number} ${element.name}</h3></div>
-                <img src=${detailsElement.sprites.other.dream_world.front_default} class="card-img-top" alt="...">
+                <div class="cardImage">
+                <figure>
+                    <img src=${detailsElement.sprites.other.dream_world.front_default} class="card-img-top" alt="...">
+                </figure>
+                </div>
                 <div>
 
                 </div>
