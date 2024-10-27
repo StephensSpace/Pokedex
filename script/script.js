@@ -3,11 +3,11 @@ let path = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=" + `${offset}`;
 let Pokemon = [];
 let PokemonDetails = [];
 let timeoutId;
-// path pokemon/1/ = `pokemon/${id}/`
 
 function ToogleLoadingSpinner() {
     document.getElementById('loadingSpinner').classList.toggle('dNone');
     document.getElementById('pokeBall').classList.toggle('dNone');
+    document.body.classList.toggle('disableOverflow');
 }
 
 async function fetchDataJson(path) {
@@ -17,6 +17,7 @@ async function fetchDataJson(path) {
         let response = await fetch(path);
         Pokemon = await response.json();
         Pokemon = Pokemon.results;
+        await SearchFetchAllPokemon()
         renderPokemon(Pokemon)
     } catch (error) {
         console.error("Fehler:", error);
@@ -30,7 +31,7 @@ function checkInputLength() {
 
     if (input.length >= 3) {  // Prüfung auf mindestens 3 Buchstaben
         timeoutId = setTimeout(() => {
-            SearchFetchAllPokemon(input);
+            searchPokeName(input);
         }, 300);  // Die Suchfunktion aufrufen und den Input übergeben
     } else if (input.length == 0) {
         fetchDataJson(path)
@@ -39,32 +40,48 @@ function checkInputLength() {
     }
 }
 
-async function SearchFetchAllPokemon(input) {
+async function SearchFetchAllPokemon() {
     try {
-        ToogleLoadingSpinner()
-        document.getElementById('content').innerHTML = '';
-        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100&offset=0");
-        Pokemon = await response.json();
-        Pokemon = Pokemon.results;
-        await PokeSearchDetailFetch()
-        searchPokeName(input)
+        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=500&offset=0");
+        let Pokemon2 = await response.json();
+        Pokemon2 = Pokemon2.results;
+        await PokeSearchDetailFetch(Pokemon2)
     } catch (error) {
         console.error("Fehler:", error);
     }
 }
 
-async function PokeSearchDetailFetch() {
-    for (let index = 0; index < Pokemon.length; index++) {
-        const element = Pokemon[index];
+async function PokeSearchDetailFetch(Pokemon2) {
+    for (let index = 0; index < Pokemon2.length; index++) {
+        const element = Pokemon2[index];
         let detailedUrl = element.url;
         await fetchDetailsPokemon(detailedUrl) - 1;
     }
 }
 
+async function fetchDetailsPokemon(path) {
+    try {
+        let response = await fetch(path);
+        let PokemonDetailsVar = await response.json();
+        let index2 = PokemonDetailsVar.id
+        if (PokemonDetails.length < index2) {
+            PokemonDetails.push(PokemonDetailsVar);
+            return index2
+        } else {
+            return index2
+        }
+    } catch (error) {
+        console.error("Fehler:", error);
+    }
+}
+
 function searchPokeName(input) {
+    ToogleLoadingSpinner();
+    SearchFetchAllPokemon();
+    document.getElementById('content').innerHTML = '';
     const filteredPokemon = Pokemon.filter(pokemon =>
         pokemon.name.includes(input.toLowerCase()));
-    renderPokemon(filteredPokemon)
+    renderPokemon(filteredPokemon);
 }
 
 function updatePath() {
@@ -72,13 +89,12 @@ function updatePath() {
 }
 
 function handleClick(button) {
-    // Überprüfe die ID des Buttons
-    let nextBtn = document.getElementById('nextBtn')
-    let backBtn = document.getElementById('backBtn')
+    let nextBtn = document.getElementById('nextBtn');
+    let backBtn = document.getElementById('backBtn');
     if (button.id === "nextBtn") {
-        nextBtnClick(nextBtn, backBtn)
+        nextBtnClick(nextBtn, backBtn);
     } else if (button.id === "backBtn") {
-        backBtnClick(nextBtn, backBtn)
+        backBtnClick(nextBtn, backBtn);
     }
 }
 
@@ -111,33 +127,20 @@ function backBtnClick(nextBtn, backBtn) {
     }
 }
 
-
-
 async function renderPokemon(array) {
     for (let index = 0; index < array.length; index++) {
         const element = array[index];
         let detailedUrl = element.url;
-        let index2 = await fetchDetailsPokemon(detailedUrl) - 1;
+        let match = detailedUrl.match(/(\d+)(?=\/$)/);
+        let index2 = match[0] - 1;
         let detailsElement = PokemonDetails[index2];
         let classUrl = getType(detailsElement);
         let classImages = await fetchClassImage(classUrl);
-        let number = index2 + 1;
-        document.getElementById('content').innerHTML += PokeCardHTML(element, detailsElement, number);
+        let number = detailsElement.id;
+        document.getElementById('content').innerHTML += PokeCardHTML(element, detailsElement, number, index2);
         renderClasses(classImages, number);
     }
     ToogleLoadingSpinner();
-}
-
-function renderClasses(classImages, number) {
-    classImages.forEach(element => {
-        renderCard = document.getElementById(`card-body${number}`)
-        // Erstelle ein neues <img>-Element
-        const imgElement = document.createElement('img');
-        // Setze die src-Attribute für das Bild
-        imgElement.src = element;
-        // Optional: Setze andere Attribute wie alt und class imgElement.classList.add('class-image');
-        renderCard.appendChild(imgElement)
-    });
 }
 
 async function fetchClassImage(classUrl) {
@@ -147,7 +150,7 @@ async function fetchClassImage(classUrl) {
         const response = await fetch(element);
         const ClassImageObj = await response.json();
         let image = ClassImageObj.sprites["generation-viii"]["sword-shield"].name_icon;
-        classImages.push(image)
+        classImages.push(image);
     }
     return classImages;
 }
@@ -160,37 +163,16 @@ function getType(detailsElement) {
     return classUrl;
 }
 
-function PokeCardHTML(element, detailsElement, number) {
-
-    return `<div class="card" style="width: 18rem;">
-                <div class="cardHeader"><h3>#${number} ${element.name}</h3></div>
-                <div class="cardImage">
-                <figure>
-                    <img src=${detailsElement.sprites.other.dream_world.front_default} class="card-img-top" alt="...">
-                </figure>
-                </div>
-                <div>
-
-                </div>
-                <div class="card-body" id="card-body${number}">
-                    
-            </div>
-            </div>`
+function getNextAndBack(index) {
+    let next = index + 1
+    let back = index - 1
+    next = next === 25 ? 0 : next;
+    next = next === 50 ? 25 : next;
+    next = next === 75 ? 50 : next;
+    next = next === 100 ? 75 : next;
+    back = back === 74 ? 99 : back;
+    back = back === 49 ? 74 : back;
+    back = back === 24 ? 49 : back;
+    back = back === -1 ? 24 : back;
+    return [next, back];
 }
-
-async function fetchDetailsPokemon(path) {
-    try {
-        let response = await fetch(path);
-        let PokemonDetailsVar = await response.json();
-        let index2 = PokemonDetailsVar.id
-        if (PokemonDetails.length < index2) {
-            PokemonDetails.push(PokemonDetailsVar);
-            return index2
-        } else {
-            return index2
-        }
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
-}
-
