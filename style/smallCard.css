@@ -1,0 +1,113 @@
+/* LoadingSpinner Overlay */
+.overlay {
+    height: 82vh;
+    width: 100%;
+    background-color: black;
+    position: absolute;
+    top: 18vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+    z-index: 5;
+    max-width: 1440px;
+    box-shadow: 4px 5px 10px black;
+}
+/*Everything about small View Cards on Main Page */
+.cardHeader {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    color: rgb(255, 205, 0) !important;
+    width: 100%;
+    height: 50px;
+    box-shadow: 0px 5px 5px black;
+    z-index: 6;
+}
+
+.classImage {
+    width: 200px;
+    height: 44px;
+    box-shadow: 4px 5px 10px black;
+}
+#content .card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#content .card {
+    box-shadow: 2px 5px 5px black;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    flex: 1 1 250px;
+    max-width: 300px;
+    margin: 30px 10px;
+    height: 500px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    font-family: 'Pokemon Solid', sans-serif;
+}
+
+#content .card figure::before {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 100%);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 100%);
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
+}
+
+#content .card:hover {
+    transform: scale(1.05);
+    /* Karte leicht vergrößern */
+    cursor: pointer;
+}
+
+#content .card figure:hover::before {
+    -webkit-animation: shine .75s;
+    animation: shine .75s;
+}
+
+@-webkit-keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+
+@keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+
+#content .card-img-top {
+    width: 96%;
+    height: 300px;
+}
+
+.cardImage {
+    width: 100%;
+    border-bottom: solid salmon;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Media Querrys*/
+
+@media(max-width: 400px) {
+    #content .card {
+        max-width: 290px;
+        margin: 30px 0px;
+    }
+}

@@ -29,10 +29,10 @@ function checkInputLength() {
     const input = document.getElementById("searchInput").value;
     clearTimeout(timeoutId);
 
-    if (input.length >= 3) {  // Prüfung auf mindestens 3 Buchstaben
+    if (input.length >= 3) {  
         timeoutId = setTimeout(() => {
             searchPokeName(input);
-        }, 300);  // Die Suchfunktion aufrufen und den Input übergeben
+        }, 300);  
     } else if (input.length == 0) {
         fetchDataJson(path)
     } else if (input.length == 4) {
@@ -42,7 +42,7 @@ function checkInputLength() {
 
 async function SearchFetchAllPokemon() {
     try {
-        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=500&offset=0");
+        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=300&offset=0");
         let Pokemon2 = await response.json();
         Pokemon2 = Pokemon2.results;
         await PokeSearchDetailFetch(Pokemon2)

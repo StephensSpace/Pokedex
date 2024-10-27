@@ -51,9 +51,9 @@ function largeViewHTML(bigPicture, pokeStats, pokeType, currentPokemon, index, n
     <img src="${bigPicture}" class="card-img-top largeImg" alt="...">
     <div id="cardType"></div>
     <nav>
-        <button onclick="renderValues(${index}); event.stopPropagation()">Werte</button>
-        <button onclick="fetchAttacks(${index}); event.stopPropagation()">Angriffe</button>
-        <button onclick="fetchEvolutionChain(${index}); event.stopPropagation()">Evolution</button>
+        <button onclick="renderValues(${index}); event.stopPropagation()" class="btn btn-secondary btn-lg">Werte</button>
+        <button onclick="fetchAttacks(${index}); event.stopPropagation()" class="btn btn-secondary btn-lg">Angriffe</button>
+        <button onclick="fetchEvolutionChain(${index}); event.stopPropagation()" class="btn btn-secondary btn-lg">Evolution</button>
     </nav>
     <div class="card-body" id="card-body">
         <ul class="list-group list-group-flush ${pokeType}">
@@ -128,6 +128,7 @@ function renderClassesLargeView(classImages) {
         renderCard = document.getElementById(`cardType`);
         const imgElement = document.createElement('img');
         imgElement.src = element;
+        imgElement.classList.add('classImage');
         renderCard.appendChild(imgElement);
     });
 }

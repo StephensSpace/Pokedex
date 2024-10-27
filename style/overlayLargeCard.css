@@ -1,0 +1,264 @@
+#overlayLargeView {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlayBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.statsBar {
+    border: 2px solid;
+    height: 10px;
+    background-color: goldenrod;
+    max-width: 300px;
+}
+
+.statsBar2 {
+    border: 2px solid;
+    border-color: black;
+    height: 10px;
+    background-color: white;
+    max-width: 300px;
+}
+
+#overlayLargeView .card {
+    z-index: 5;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 8px 8px 10px black;
+}
+
+#overlayLargeView .card-body {
+    flex: 1 1 auto;
+    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    color: var(--bs-card-color);
+    width: 90%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.list-group-item {
+    background-color: aliceblue;
+}
+
+#cardType {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 20px 0px 10px;
+}
+
+.card-body ul {
+    width: 100%;
+    margin-bottom: 40px;
+    box-shadow: 6px 6px 10px black;
+    border-left: solid 3px;
+    border-top: solid 3px;
+}
+
+.card-body ul li {
+    padding-bottom: 26px;
+}
+
+.card-body span {
+    font-family: sans-serif;
+    font-size: 18px;
+    color: whitesmoke;
+    margin-right: 0 !important;
+    margin: 20px;
+}
+
+.card-body h5 {
+    color: rgb(255, 205, 0) !important;
+    width: 100%;
+    height: 35px;
+    font-family: 'Pokemon Solid', sans-serif;
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+    text-align: center;
+    background-color: black;
+    box-shadow: 5px 5px 5px darkslategrey;
+}
+
+.largeImg {
+    height: 35vh;
+    background-color: lightgoldenrodyellow;
+    width: 90%;
+    border-radius: 10px;
+    box-shadow: 6px 6px 10px black;
+    border-top: solid 3px;
+    margin-top: 20px;
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 10px 0px;
+    justify-content: space-evenly;
+}
+
+.btn-lg {
+    box-shadow: 4px 5px 10px black;
+}
+
+.card-header {
+    background-color: black;
+    color: rgb(255, 205, 0);
+    font-family: 'Pokemon Solid', sans-serif;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 5px 5px black;
+    z-index: 5;
+}
+
+.LargeViewBtn {
+    cursor: pointer;
+    width: 128px;
+    height: 128px;
+    filter: sepia(1);
+    margin: 16px;
+}
+
+.evoImage {
+    width: 128px;
+    height: 128px;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px darkslategrey;
+}
+
+.evoArrow {
+    width: 40px;
+    height: 40px;
+}
+
+.imgAndName {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Media Querrys*/
+
+@media(max-width: 780px) {
+    .LargeViewBtn {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media(max-width: 680px) {
+    #cardType {
+        flex-direction: column;
+    }
+
+    .classImage {
+        margin-bottom: 6px;
+    }
+
+    .evoImage {
+        width: 96px;
+        height: 96px;
+    }
+}
+
+@media(max-width: 568px) {
+    .evoImage {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (max-width: 530px) {
+    .LargeViewBtn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .card-body ul li {
+        padding-bottom: 8px;
+        padding-top: 2px;
+    }
+
+    .btn-lg {
+        font-size: 16px;
+    }
+
+    .largeImg {
+        height: 28vh;
+    }
+
+    .LargeViewBtn {
+        margin: 8px;
+    }
+
+}
+
+@media (max-width: 430px) {
+    nav {
+        justify-content: center;
+    }
+
+    .btn-lg {
+        font-size: 14px;
+    }
+
+    .evoImage {
+        width: 46px;
+        height: 46px;
+    }
+
+    .card-body span {
+        font-size: 14px;
+    }
+
+    .LargeViewBtn {
+        margin: 4px;
+    }
+
+    .classImage {
+        width: 150px !important;
+        height: 34px !important;
+    }
+}
+
+@media (max-width: 340px) {
+    .card-body span {
+        font-size: 13px;
+    }
+
+    .btn-lg {
+        font-size: 13px;
+    }
+
+    .LargeViewBtn {
+        margin: 2px;
+    }
+
+}
+
+@media (max-height: 1132px) {
+    #overlayLargeView .card {
+        height: 100vh !important;
+    }
+}
