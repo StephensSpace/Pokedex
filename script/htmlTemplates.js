@@ -43,10 +43,9 @@ function valuesHTML(pokeStats, pokeType) {
 
 function largeViewHTML(bigPicture, pokeStats, pokeType, currentPokemon, index, next, back) {
     let widths = calculateStatsBarWidth(pokeStats);
-    console.log(widths)
     let number = index + 1;
     return `<img src="./buttons/left.png" alt="" onclick="event.stopPropagation(); renderLargeView(${back})" class="LargeViewBtn">
-<div class="card ${pokeType}" style="width: 36rem; height: 90vh;" onclick="event.stopPropagation()">
+<div class="card ${pokeType}" style="width: 36rem; max-height: 90vh;" onclick="event.stopPropagation()">
     <h3 class="card-header">#${number} ${currentPokemon.name}</h3>
     <img src="${bigPicture}" class="card-img-top largeImg" alt="...">
     <div id="cardType"></div>
@@ -113,71 +112,3 @@ function PokeCardHTML(element, detailsElement, number, index2) {
             </div>`
 }
 
-function renderClasses(classImages, number) {
-    classImages.forEach(element => {
-        renderCard = document.getElementById(`card-body${number}`);
-        const imgElement = document.createElement('img');
-        imgElement.src = element;
-        imgElement.classList.add('classImage');
-        renderCard.appendChild(imgElement);
-    });
-}
-
-function renderClassesLargeView(classImages) {
-    classImages.forEach(element => {
-        renderCard = document.getElementById(`cardType`);
-        const imgElement = document.createElement('img');
-        imgElement.src = element;
-        imgElement.classList.add('classImage');
-        renderCard.appendChild(imgElement);
-    });
-}
-
-function renderAttacksHtml(abilitiesData) {
-    const cardBody = document.getElementById('card-body');
-    cardBody.innerHTML = '';
-    abilitiesData.forEach((ability, index) => {
-        const h5 = document.createElement('h5');
-        h5.textContent = `Attacke ${index + 1}: ${ability.name}`;
-        const span = document.createElement('span');
-        span.textContent = getGermanEffect(ability.effect_entries);
-        cardBody.appendChild(h5);
-        cardBody.appendChild(span);
-    });
-}
-
-function addEvolutionToHTML(index2, isLast) {
-    const cardBody = document.getElementById('card-body');
-    cardBody.classList.add('displayRow');
-    let currentPokemon = PokemonDetails[index2];
-    let [img, arrow, span, index] = createImgAndSpan(currentPokemon);
-    let divContainer = createAndPopulateDiv(span, img, index);
-    cardBody.appendChild(divContainer);
-    document.getElementById(`${index}`).onclick = () => { renderLargeView(index) };
-    if (!isLast) {
-        cardBody.appendChild(arrow);
-    };
-}
-
-function createAndPopulateDiv(span, img, index) {
-    let divContainer = document.createElement('div');
-    divContainer.classList.add('imgAndName');
-    divContainer.id = `${index}`;
-    divContainer.appendChild(img);
-    divContainer.appendChild(span);
-    return divContainer;
-}
-
-function createImgAndSpan(currentPokemon) {
-    let index = currentPokemon.id - 1;
-    let img = document.createElement('img');
-    img.src = currentPokemon.sprites.other.dream_world.front_default;
-    img.classList.add('evoImage');
-    let arrow = document.createElement('img');
-    arrow.src = './img/evoArrow.png';
-    arrow.classList.add('evoArrow');
-    let span = document.createElement('span');
-    span.innerHTML = currentPokemon.name;
-    span.classList.add('noMargin');
-    return [img, arrow, span, index];
-}

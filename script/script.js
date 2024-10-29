@@ -18,11 +18,10 @@ async function fetchDataJson(path) {
         Pokemon = await response.json();
         Pokemon = Pokemon.results;
         await SearchFetchAllPokemon()
-        renderPokemon(Pokemon)
+        await renderPokemon(Pokemon)
     } catch (error) {
         console.error("Fehler:", error);
     }
-
 }
 
 function checkInputLength() {
@@ -35,51 +34,48 @@ function checkInputLength() {
         }, 300);  
     } else if (input.length == 0) {
         fetchDataJson(path)
-    } else if (input.length == 4) {
-
-    }
+    } else if (input.length == 4) {}
 }
 
 async function SearchFetchAllPokemon() {
     try {
-        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=300&offset=0");
+        let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=200&offset=0");
         let Pokemon2 = await response.json();
         Pokemon2 = Pokemon2.results;
-        await PokeSearchDetailFetch(Pokemon2)
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
-}
-
-async function PokeSearchDetailFetch(Pokemon2) {
-    for (let index = 0; index < Pokemon2.length; index++) {
-        const element = Pokemon2[index];
-        let detailedUrl = element.url;
-        await fetchDetailsPokemon(detailedUrl) - 1;
-    }
-}
-
-async function fetchDetailsPokemon(path) {
-    try {
-        let response = await fetch(path);
-        let PokemonDetailsVar = await response.json();
-        let index2 = PokemonDetailsVar.id
-        if (PokemonDetails.length < index2) {
-            PokemonDetails.push(PokemonDetailsVar);
-            return index2
+        if (PokemonDetails.length === 0) {
+            await PokeSearchDetailFetch(Pokemon2);
+            return Pokemon2;
         } else {
-            return index2
+            return Pokemon2;
         }
     } catch (error) {
         console.error("Fehler:", error);
     }
 }
 
-function searchPokeName(input) {
+async function PokeSearchDetailFetch(Pokemon2) {
+    await Promise.all(Pokemon2.map(async (details) => {
+        let PokemonDetailsVar = await fetchDetailsPokemon(details.url); // Abrufen der Details für jedes Pokémon
+        let index2 = PokemonDetailsVar.id; // Verwende die ID, um die Position festzulegen
+        PokemonDetails[index2 - 1] = PokemonDetailsVar; // Speichert PokemonDetailsVar an der Position `index2 - 1`
+    }));
+}
+
+async function fetchDetailsPokemon(path) {
+    try {
+        let response = await fetch(path);
+        let PokemonDetailsVar = await response.json();
+        return PokemonDetailsVar; // Rückgabe des vollständigen Detail-Objekts
+    } catch (error) {
+        console.error("Fehler:", error);
+    }
+}
+
+async function searchPokeName(input) {
     ToogleLoadingSpinner();
-    SearchFetchAllPokemon();
+    let Pokemon2 = await SearchFetchAllPokemon()
     document.getElementById('content').innerHTML = '';
-    const filteredPokemon = Pokemon.filter(pokemon =>
+    const filteredPokemon = Pokemon2.filter(pokemon =>
         pokemon.name.includes(input.toLowerCase()));
     renderPokemon(filteredPokemon);
 }
@@ -92,13 +88,13 @@ function handleClick(button) {
     let nextBtn = document.getElementById('nextBtn');
     let backBtn = document.getElementById('backBtn');
     if (button.id === "nextBtn") {
-        nextBtnClick(nextBtn, backBtn);
+        loadNextPokemonsBtn(nextBtn, backBtn);
     } else if (button.id === "backBtn") {
-        backBtnClick(nextBtn, backBtn);
+        loadLastPokemonBtn(nextBtn, backBtn);
     }
 }
 
-function nextBtnClick(nextBtn, backBtn) {
+function loadNextPokemonsBtn(nextBtn, backBtn) {
     if (offset == 50) {
         nextBtn.disabled = true;
         offset += 25;
@@ -112,7 +108,7 @@ function nextBtnClick(nextBtn, backBtn) {
     }
 }
 
-function backBtnClick(nextBtn, backBtn) {
+function loadLastPokemonBtn(nextBtn, backBtn) {
     if (offset == 25) {
         offset -= 25;
         updatePath();
@@ -163,16 +159,12 @@ function getType(detailsElement) {
     return classUrl;
 }
 
-function getNextAndBack(index) {
-    let next = index + 1
-    let back = index - 1
-    next = next === 25 ? 0 : next;
-    next = next === 50 ? 25 : next;
-    next = next === 75 ? 50 : next;
-    next = next === 100 ? 75 : next;
-    back = back === 74 ? 99 : back;
-    back = back === 49 ? 74 : back;
-    back = back === 24 ? 49 : back;
-    back = back === -1 ? 24 : back;
-    return [next, back];
+function renderClasses(classImages, number) {
+    classImages.forEach(element => {
+        renderCard = document.getElementById(`card-body${number}`);
+        const imgElement = document.createElement('img');
+        imgElement.src = element;
+        imgElement.classList.add('classImage');
+        renderCard.appendChild(imgElement);
+    });
 }

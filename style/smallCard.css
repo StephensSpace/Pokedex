@@ -1,6 +1,6 @@
 /* LoadingSpinner Overlay */
 .overlay {
-    height: 82vh;
+    height: 85vh;
     width: 100%;
     background-color: black;
     position: absolute;
@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     overflow-y: hidden;
-    z-index: 5;
+    z-index: 7;
     max-width: 1440px;
     box-shadow: 4px 5px 10px black;
 }
@@ -107,7 +107,14 @@
 
 @media(max-width: 400px) {
     #content .card {
-        max-width: 290px;
+        max-width: 160px;
         margin: 30px 0px;
+        margin-right: 20px;
+        
+    }
+
+    h3 {
+        font-size: 16px !important;
     }
 }
+

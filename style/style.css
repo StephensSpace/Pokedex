@@ -52,6 +52,7 @@ body {
     max-width: 1440px;
     flex-wrap: wrap;
     border: solid lightgrey;
+    width: 100%;
 }
 
 header {
