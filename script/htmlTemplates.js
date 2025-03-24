@@ -1,6 +1,5 @@
 function valuesHTML(pokeStats, pokeType) {
     let widths = calculateStatsBarWidth(pokeStats);
-    console.log(widths)
     return `<ul class="list-group list-group-flush ${pokeType}">
             <li class="list-group-item"><b>Health: ${widths[0]}</b>
                 <div class="displayRow">

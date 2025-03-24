@@ -56,7 +56,9 @@ body {
 }
 
 header {
-    height: 18vh;
+    min-height: 14vh;
+    max-height: 18vh;
+    height: 100%;
     width: 100%;
     background-color: rgb(255, 0, 0);
     position: fixed;
@@ -70,6 +72,8 @@ header {
 
 #headline {
     width: 550px;
+    max-height: 16vh;
+    height: auto;
 }
 
 #navigation {
